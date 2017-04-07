@@ -1,6 +1,7 @@
 package com.eclipsercp.swtjface;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -194,6 +195,11 @@ public class Calculator {
 			result.setText("Empty second operand");
 			return;
 		}
+		
+		if (opChar.equals("!") && valA < 0) {
+			result.setText("First operand cannot be negative");
+			return;
+		}
 
 		if (opChar.length() == 0) {
 			result.setText("Empty operation field");
@@ -223,7 +229,13 @@ public class Calculator {
 			
 		case "!": // Factorial
 			valAnswerFactorial = factorial(valA.intValue());
-			resultString = valAnswerFactorial.toString();
+			
+			//0	a digit
+			//#	a digit, zero shows as absent
+			//.	placeholder for decimal separator
+			//E	separates mantissa and exponent for exponential formats
+			DecimalFormat df = new DecimalFormat("0.###E0");			
+			resultString = df.format(valAnswerFactorial);
 			break;
 
 		default: // Do nothing - this should never happen
@@ -246,17 +258,13 @@ public class Calculator {
 		display.dispose();
 	}
 	
-	// Returns Factorial of N
-    static BigInteger factorial(int N)
-    {
-        // Initialize result
-        BigInteger result = BigInteger.ONE;
- 
-        // Multiply f with 2, 3, ...N
-        for (int i = 2; i <= N; i++)
-            result = result.multiply(BigInteger.valueOf(i));
- 
-        return result;
-    }
+	private BigInteger factorial(int n) {
+		if (n <= 0) {
+			return BigInteger.ONE;
+		} else {
+			return BigInteger.valueOf(n).multiply(factorial(n - 1));
+		}
+
+	}
 
 }
