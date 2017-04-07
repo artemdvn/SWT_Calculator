@@ -1,5 +1,7 @@
 package com.eclipsercp.swtjface;
 
+import java.math.BigInteger;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -59,7 +61,7 @@ public class Calculator {
 		firstOperand.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		operationTypeCombo = new Combo(firstPageComposite, SWT.READ_ONLY);
-		String items[] = { "+", "-", "/", "*" };
+		String items[] = { "+", "-", "/", "*", "!" };
 		operationTypeCombo.setItems(items);
 		operationTypeCombo.setText(items[0]);
 		operationTypeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -166,6 +168,7 @@ public class Calculator {
 		Double valA = 0.0;
 		Double valB = 0.0;
 		Double valAnswer = 0.0;
+		BigInteger valAnswerFactorial = BigInteger.ZERO;
 
 		// Make sure register strings are numbers
 		if (valAString.length() > 0) {
@@ -187,7 +190,7 @@ public class Calculator {
 				result.setText("Wrong second operand");
 				return;
 			}
-		} else {
+		} else if (!opChar.equals("!")) {
 			result.setText("Empty second operand");
 			return;
 		}
@@ -200,18 +203,27 @@ public class Calculator {
 		switch (opChar) {
 		case "+": // Addition
 			valAnswer = valA + valB;
+			resultString = valAnswer.toString();
 			break;
 
 		case "-": // Subtraction
 			valAnswer = valA - valB;
+			resultString = valAnswer.toString();
 			break;
 
 		case "/": // Division
 			valAnswer = valA / valB;
+			resultString = valAnswer.toString();
 			break;
 
 		case "*": // Multiplication
 			valAnswer = valA * valB;
+			resultString = valAnswer.toString();
+			break;
+			
+		case "!": // Factorial
+			valAnswerFactorial = factorial(valA.intValue());
+			resultString = valAnswerFactorial.toString();
 			break;
 
 		default: // Do nothing - this should never happen
@@ -219,7 +231,6 @@ public class Calculator {
 
 		}
 
-		resultString = valAnswer.toString();
 		result.setText(resultString);
 
 		historyList.add(valAString + " " + opChar + " " + valBString + " = " + resultString);
@@ -234,5 +245,18 @@ public class Calculator {
 		// disposes all associated windows and their components
 		display.dispose();
 	}
+	
+	// Returns Factorial of N
+    static BigInteger factorial(int N)
+    {
+        // Initialize result
+        BigInteger result = BigInteger.ONE;
+ 
+        // Multiply f with 2, 3, ...N
+        for (int i = 2; i <= N; i++)
+            result = result.multiply(BigInteger.valueOf(i));
+ 
+        return result;
+    }
 
 }
