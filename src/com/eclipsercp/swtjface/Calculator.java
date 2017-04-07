@@ -197,7 +197,7 @@ public class Calculator {
 		}
 		
 		if (opChar.equals("!") && valA < 0) {
-			result.setText("First operand cannot be negative");
+			result.setText("Illegal first operand");
 			return;
 		}
 
